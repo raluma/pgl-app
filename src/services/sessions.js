@@ -1,67 +1,116 @@
 import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const useSessionStore = create((set) => ({
-  session: {
-    'username': '',
-    'session': false
-  },
-  login: (username) => set({
+export const useSessionStore = create((set) => {
+  return {
     session: {
-      'username': username,
-      'session': true
-    }
-  }),
-  logout: () => set({
-    session: {
+      state: {
+        'nombre': 'Inicio',
+        'value': false,
+        'message': ''
+      },
       'username': '',
-      'session': false
-    }
-  }),
-}))
-
-export const getSession = async (username, inputKey) => {
-  try {
-    const key = await AsyncStorage.getItem(username);
-
-    if (key !== null) {
-      if (inputKey === key) {
-        return {
-          message: 'Has iniciado sesión con éxito',
-          session: useSessionStore(() => login(username))
+      'password': ''
+    },
+    signup: async (username, inputKey) => {
+      try {
+        const key = await AsyncStorage.getItem(username);
+    
+        if (key !== null) {
+          set({ 
+            session: {
+              state: {
+                'nombre': 'Registro',
+                'value': false,
+                'message': 'El usuario ya había sido registrado con anterioridad.'
+              },
+              'username': '',
+              'password': ''
+            } 
+          });
+        } else {
+          await AsyncStorage.setItem(username, inputKey);
+          set({ 
+            session: {
+              state: {
+                'nombre': 'Registro',
+                'value': true,
+                'message': 'El usuario ha sido registrado con éxito.'
+              },
+              'username': '',
+              'password': ''
+            } 
+          });
         }
-      } else {
-        return {
-          message: 'La contraseña es incorrecta',
-          session: ''
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    login: async (username, iPassword) => {
+      try {
+        const password = await AsyncStorage.getItem(username);
+    
+        if (password !== null) {
+          if (password === iPassword) {
+            set({ 
+              session: {
+                state: {
+                  'nombre': 'Inicio',
+                  'value': true,
+                  'message': 'Has iniciado sesión con éxito'
+                },
+                'username': username,
+                'password': iPassword
+              } 
+            });
+          } else {
+            set({ 
+              session: {
+                state: {
+                  'nombre': 'Inicio',
+                  'value': false,
+                  'message': 'La contraseña es incorrecta'
+                },
+                'username': '',
+                'password': ''
+              } 
+            });
+          }
+        } else {
+          set({ 
+            session: {
+              state: {
+                'nombre': 'Inicio',
+                'value': false,
+                'message': 'Ese nombre de usuario no existe'
+              },
+              'username': '',
+              'password': ''
+            } 
+          });
         }
+      } catch (e) {
+        console.log(e);
       }
-    } else {
-      return {
-        message: 'Ese nombre de usuario no existe',
-        session: ''
-      }
-    }
-  } catch (e) {
-    return {
-      message: 'Error al iniciar la sesión del usuario: ' + e.message,
-      session: ''
+    },
+    logout: () => {
+      set({ 
+        session: {
+          state: {
+            'nombre': 'Cierre',
+            'value': true,
+            'message': 'Has cerrado la sesión con éxito'
+          },
+          'username': '',
+          'password': ''
+        } 
+      });
     }
   }
-};
+})
 
-export const setSession = async (username, inputKey) => {
-  try {
-    const key = await AsyncStorage.getItem(username);
 
-    if (key !== null) {
-      return 'El usuario ya había sido registrado con anterioridad.';
-    } else {
-      await AsyncStorage.setItem(username, inputKey);
-      return 'El usuario ha sido registrado con éxito.';
-    }
-  } catch (e) {
-    return 'Error al registrar al usuario: ' + e.message;
-  }
-};
+
+
+
 
