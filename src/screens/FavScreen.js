@@ -1,14 +1,39 @@
-import React from 'react';
-import { useSessionStore } from '../services/sessions';
-import Login from '../components/Login';
+import React, { useEffect } from 'react';
+import { StyleSheet, View, Image } from 'react-native';
+import { useFavListStore } from '../services/favList';
 
-export default function App() {
-    const session = useSessionStore(state => state.session); 
-    console.log(session);
+export default function FavScreen({ idsFavList }) {
+    const loadFavList = useFavListStore(state => state.loadFavList);
+    const width = 120;
+    const height = 120;
+
+    useEffect(() => {   
+        loadFavList()
+    }, []);
 
     return (
-        <>
-            <Login />
-        </>
+        <View style={styles.container}>
+            {
+                idsFavList.map(id => {
+                    return (
+                        <Image 
+                            key={id}
+                            source = {{ uri: `https://img.foxes.cool/scary/${id}.jpg?width=${width}&height=${height}` }}  
+                            style = {{ width, height }} 
+                        />
+                    )
+                })
+            }
+        </View>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        gap: 4
+    }
+});
