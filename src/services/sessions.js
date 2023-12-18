@@ -5,7 +5,7 @@ export const useSessionStore = create((set) => {
   return {
     session: {
       state: {
-        'nombre': 'Inicio',
+        'nombre': '',
         'value': false,
         'message': ''
       },
