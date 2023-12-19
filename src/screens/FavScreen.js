@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, View, Image, Text } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
+import { Card } from 'react-native-paper';
 import { useFavListStore } from '../services/favList';
 
 export default function FavScreen({ session, idsFavList }) {
@@ -19,11 +20,11 @@ export default function FavScreen({ session, idsFavList }) {
                         {
                             idsFavList.map(id => {
                                 return (
-                                    <Image 
-                                        key={id}
-                                        source = {{ uri: `https://img.foxes.cool/scary/${id}.jpg?width=${width}&height=${height}` }}  
-                                        style = {{ width, height }} 
-                                    />
+                                    <View key={id} style={styles.article}>
+                                        <Card style={styles.card}>
+                                                <Card.Cover source={{ uri: `https://img.foxes.cool/scary/${id}.jpg?width=${width}&height=${height}` }} />
+                                        </Card>
+                                    </View>
                                 )
                             })
                         }
@@ -41,7 +42,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'center',
-        gap: 4
+        alignItems: 'center',
+        columnGap: 10,
+        rowGap: 16,
+        marginTop: 14
+    },
+    article: {
+        width: 120,
+        height: 200,
     },
     advice: {
         marginTop: 8, 
