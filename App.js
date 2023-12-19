@@ -47,7 +47,7 @@ export default function App() {
 
         <Tab.Screen 
           name='Favs' 
-          children={()=> <FavScreen idsFavList={idsFavList} />}
+          children={()=> <FavScreen session={session} idsFavList={idsFavList} />}
         />
 
         <Tab.Screen 
