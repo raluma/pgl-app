@@ -16,7 +16,9 @@ export default function Login({ session }) {
         Alert.alert('', session.state.message);
         resetState();
     } else if (session.state.name === "Logout") {
-        Alert.alert('', session.state.message);
+        setTimeout(() => {
+            Alert.alert('', session.state.message);
+        }, 1000);
         resetState();
     }
 
