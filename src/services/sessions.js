@@ -5,14 +5,14 @@ export const useSessionStore = create((set) => {
   return {
     session: {
       state: {
-        'nombre': '',
-        'value': false,
-        'message': ''
+        'name': 'Login',
+        'value': null,
+        'message': null
       },
       'username': '',
       'password': ''
     },
-    signup: async (username, inputKey) => {
+    signup: async (username, password) => {
       try {
         const key = await AsyncStorage.getItem(username);
     
@@ -20,22 +20,22 @@ export const useSessionStore = create((set) => {
           set({ 
             session: {
               state: {
-                'nombre': 'Registro',
+                'name': 'Signup',
                 'value': false,
-                'message': 'El usuario ya había sido registrado con anterioridad.'
+                'message': 'The user has been previously registered.'
               },
               'username': '',
               'password': ''
             } 
           });
         } else {
-          await AsyncStorage.setItem(username, inputKey);
+          await AsyncStorage.setItem(username, password);
           set({ 
             session: {
               state: {
-                'nombre': 'Registro',
+                'name': 'Signup',
                 'value': true,
-                'message': 'El usuario ha sido registrado con éxito.'
+                'message': 'The user has been sucessfully registered.'
               },
               'username': '',
               'password': ''
@@ -46,30 +46,30 @@ export const useSessionStore = create((set) => {
         console.log(e);
       }
     },
-    login: async (username, iPassword) => {
+    login: async (username, password) => {
       try {
-        const password = await AsyncStorage.getItem(username);
+        const key = await AsyncStorage.getItem(username);
     
-        if (password !== null) {
-          if (password === iPassword) {
+        if (key !== null) {
+          if (key === password) {
             set({ 
               session: {
                 state: {
-                  'nombre': 'Inicio',
+                  'name': 'Login',
                   'value': true,
-                  'message': 'Has iniciado sesión con éxito'
+                  'message': 'You are successfully logged in.'
                 },
                 'username': username,
-                'password': iPassword
+                'password': password
               } 
             });
           } else {
             set({ 
               session: {
                 state: {
-                  'nombre': 'Inicio',
+                  'name': 'Login',
                   'value': false,
-                  'message': 'La contraseña es incorrecta'
+                  'message': 'The password is inconrrect.'
                 },
                 'username': '',
                 'password': ''
@@ -80,9 +80,9 @@ export const useSessionStore = create((set) => {
           set({ 
             session: {
               state: {
-                'nombre': 'Inicio',
+                'name': 'Login',
                 'value': false,
-                'message': 'Ese nombre de usuario no existe'
+                'message': 'Username does not exist.'
               },
               'username': '',
               'password': ''
@@ -97,12 +97,52 @@ export const useSessionStore = create((set) => {
       set({ 
         session: {
           state: {
-            'nombre': 'Cierre',
+            'name': 'Logout',
             'value': true,
-            'message': 'Has cerrado la sesión con éxito'
+            'message': 'You have successfully logged out.'
           },
           'username': '',
           'password': ''
+        } 
+      });
+    },
+    setNameState: (name) => {
+      set({ 
+        session: {
+          state: {
+            'name': name,
+            'value': null,
+            'message': null
+          },
+          'username': '',
+          'password': ''
+        } 
+      });
+    },
+    resetState: () => {
+      set({ 
+        session: {
+          state: {
+            'name': 'Login',
+            'value': null,
+            'message': null
+          },
+          'username': '',
+          'password': ''
+        }
+      });
+    },
+    setPassword: async (username, password) => {
+      await AsyncStorage.setItem(username, password);
+      set({ 
+        session: {
+          state: {
+            'name': 'Login',
+            'value': true,
+            'message': 'Successful update'
+          },
+          'username': username,
+          'password': password
         } 
       });
     }
