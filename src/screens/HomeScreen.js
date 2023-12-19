@@ -1,4 +1,8 @@
-import { StyleSheet, View, Image, Text } from 'react-native';
+import { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+import FlipCard from 'react-native-flip-card'
+import { Card } from 'react-native-paper';
+import { Button, Icon } from '@rneui/themed';
 
 const idsHomeList = [];
 
@@ -6,20 +10,64 @@ for (let i = 1; i <= 9; i++) {
     idsHomeList.push(i);
 }
 
-export default function HomeScreen() {
+export default function HomeScreen({ session }) {
+    const [fav, setFav] = useState(false);
     const width = 120;
     const height = 120;
+
+    
     
     return (
         <View style={styles.container}>
             {
                 idsHomeList.map(id => {
-                    return (
-                        <Image 
-                            key={id}
-                            source = {{ uri: `https://img.foxes.cool/scary/${id}.jpg?width=${width}&height=${height}` }}  
-                            style = {{ width, height }} 
-                        />
+                    return (    
+                        <View key={id} style={styles.article}>
+                            {   
+                                session.state.name === "Login" && session.state.value === true ?
+                                    <FlipCard 
+                                        friction={6}
+                                        perspective={1000}
+                                        flipHorizontal={false}
+                                        flipVertical={true}
+                                        flip={false}
+                                        clickable={true}
+                                    >
+                                        <View style={styles.face}>
+                                            <Card style={styles.card}>
+                                                <Card.Cover source={{ uri: `https://img.foxes.cool/scary/${id}.jpg?width=${width}&height=${height}` }} />
+                                            </Card>
+
+                                            <Icon 
+                                                name="retweet" 
+                                                type="font-awesome" 
+                                                color="black"
+                                                size={20}
+                                            /> 
+                                        </View>
+
+                                        <View style={styles.back}>
+                                            <Button
+                                                buttonStyle={styles.button}
+                                                onPress={() => setFav(!fav)}
+                                            >
+                                                <Icon 
+                                                    name="heart" 
+                                                    type="font-awesome" 
+                                                    color={ fav ? "red" : "black"}
+                                                    size={60}
+                                                /> 
+                                            </Button>
+                                        </View>
+                                    </FlipCard>
+                                : 
+                                <>
+                                    <Card style={styles.card}>
+                                            <Card.Cover source={{ uri: `https://img.foxes.cool/scary/${id}.jpg?width=${width}&height=${height}` }} />
+                                    </Card>
+                                </>
+                            }
+                        </View>
                     )
                 })
             }
@@ -33,6 +81,40 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'center',
-        gap: 4
+        alignItems: 'center',
+        columnGap: 10,
+        rowGap: 16,
+        marginTop: 14
+    },
+    article: {
+        width: 120,
+        height: 200,
+    },
+    face: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 120,
+        height: 200,
+    }, 
+    card: {
+        width: 120,
+    },
+    back: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 2,
+        borderColor: 'black',
+        borderRadius: 20,
+        width: 120,
+        height: 200
+    },
+    button: {
+        backgroundColor: 'none',
+        width: 80,
+        height: 72
     }
 });
