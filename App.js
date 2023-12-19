@@ -42,7 +42,7 @@ export default function App() {
       >
         <Tab.Screen 
           name='Home' 
-          children={()=> <HomeScreen />}
+          children={()=> <HomeScreen session={session} />}
         />
 
         <Tab.Screen 
