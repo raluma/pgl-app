@@ -5,7 +5,7 @@ import { useSessionStore } from '../services/sessions';
 export default function Header({ title, session, navigation }) {
     const { state, username } = session;
     const shortUsername = username.substring(0, 2);
-    const logout = useSessionStore(state => state.logout)
+    const logout = useSessionStore(state => state.logout);
 
     const onPressLogin = () => {
         navigation.navigate('Account');
@@ -19,7 +19,7 @@ export default function Header({ title, session, navigation }) {
         <View style={styles.headerStyle}>
             <Text style={styles.textStyle}>{title}</Text>
             { 
-                state.nombre === 'Inicio' && state.value && title === 'Account' ?
+                state.name === 'Login' && state.value && title === 'Account' ?
                     <View style={styles.profileContainer}>
                         <Button icon="logout" mode="contained-tonal" 
                             labelStyle={{ fontSize: 16 }}
@@ -29,7 +29,7 @@ export default function Header({ title, session, navigation }) {
                         </Button>
                     </View>
 
-                : state.nombre === 'Inicio' && state.value ?
+                : state.name === 'Login' && state.value ?
                     <View style={styles.profileContainer}>
                         <Avatar.Text size={40} label={shortUsername} />
                     </View>
