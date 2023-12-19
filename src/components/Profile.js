@@ -1,20 +1,20 @@
 import { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Alert } from 'react-native';
 import { Avatar, TextInput, Button } from 'react-native-paper';
+import { useSessionStore } from '../services/sessions';
 
 export default function Profile({ session }) {
-    const { state, username, password } = session;
+    const setPassword = useSessionStore(state => state.setPassword);
+    const resetState = useSessionStore(state => state.resetState);
+    const { username, password } = session;
     const shortUsername = username.substring(0, 2);
 
     const [newPassword, setNewPassword] = useState(password);
     const [hidden, setHidden] = useState(true);
 
-    const onEye = () => {
-        setHidden(!hidden);
-    }
-
     const onPressUpdate = () => {
-
+        setPassword(username, newPassword);
+        Alert.alert('', 'Successful update');
     }
 
     return (
@@ -32,9 +32,9 @@ export default function Profile({ session }) {
             <TextInput
                 label="Password"
                 secureTextEntry = {hidden}
-                right={<TextInput.Icon icon="eye" onPress={onEye} />}
+                right={<TextInput.Icon icon="eye" onPress={() => setHidden(!hidden)} />}
                 mode="flat"
-                value={password}
+                value={newPassword}
                 onChangeText={password => setNewPassword(password)}
                 style={styles.textInput}
             />
