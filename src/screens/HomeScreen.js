@@ -1,8 +1,8 @@
-import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import FlipCard from 'react-native-flip-card'
 import { Card } from 'react-native-paper';
 import { Button, Icon } from '@rneui/themed';
+import { useFavListStore } from '../services/favList';
 
 const idsHomeList = [];
 
@@ -10,12 +10,20 @@ for (let i = 1; i <= 9; i++) {
     idsHomeList.push(i);
 }
 
-export default function HomeScreen({ session }) {
-    const [fav, setFav] = useState(false);
+export default function HomeScreen({ session, idsFavList }) {
+    const { username } = session;
+    const addFav = useFavListStore(state => state.addFav);
+    const dropFav = useFavListStore(state => state.dropFav);
     const width = 120;
     const height = 120;
 
-    
+    const onToggle = (id) => {
+        if (idsFavList.includes(id)) {
+            dropFav(username, id);
+        } else {
+            addFav(username, id);
+        }
+    }
     
     return (
         <View style={styles.container}>
@@ -49,12 +57,12 @@ export default function HomeScreen({ session }) {
                                         <View style={styles.back}>
                                             <Button
                                                 buttonStyle={styles.button}
-                                                onPress={() => setFav(!fav)}
+                                                onPress={() => onToggle(id)}
                                             >
                                                 <Icon 
                                                     name="heart" 
                                                     type="font-awesome" 
-                                                    color={ fav ? "red" : "black"}
+                                                    color={ idsFavList.includes(id) ? 'red' : 'black' }
                                                     size={60}
                                                 /> 
                                             </Button>
