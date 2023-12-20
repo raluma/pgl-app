@@ -42,12 +42,15 @@ export default function App() {
       >
         <Tab.Screen 
           name='Home' 
-          children={()=> <HomeScreen session={session} />}
+          children={()=> <HomeScreen session={session} idsFavList={idsFavList} />}
         />
 
         <Tab.Screen 
           name='Favs' 
           children={()=> <FavScreen session={session} idsFavList={idsFavList} />}
+          options={ 
+            session.state.name === "Login" && session.state.value === true 
+            ? {} : { tabBarBadge: "!" } }
         />
 
         <Tab.Screen 
