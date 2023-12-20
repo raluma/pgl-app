@@ -5,7 +5,6 @@ import { useSessionStore } from '../services/sessions';
 
 export default function Profile({ session }) {
     const setPassword = useSessionStore(state => state.setPassword);
-    const resetState = useSessionStore(state => state.resetState);
     const { username, password } = session;
     const shortUsername = username.substring(0, 2);
 
