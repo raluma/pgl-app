@@ -12,9 +12,15 @@ export const useFavListStore = create((set) => {
         idsFavList: [],
         loadFavList: (username) => {
             db.transaction(tx => {
-                tx.executeSql("SELECT * FROM favs WHERE username = ?", [username],
+                tx.executeSql("SELECT fav_id FROM favs WHERE username = ?", [username],
                     (_txObject, resulSet) => {
-                        set({ idsFavList: resulSet.rows._array})
+                        const idsFavList = [];
+
+                        resulSet.rows._array.forEach(row => {
+                            idsFavList.push(row["fav_id"]);
+                        });
+
+                        set({ idsFavList })
                     },
                     (_txObject, error) => console.log(error)
                 );
