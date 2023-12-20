@@ -4,12 +4,13 @@ import { Card } from 'react-native-paper';
 import { useFavListStore } from '../services/favList';
 
 export default function FavScreen({ session, idsFavList }) {
+    const { username } = session;
     const loadFavList = useFavListStore(state => state.loadFavList);
     const width = 120;
     const height = 120;
 
     useEffect(() => {   
-        loadFavList()
+        loadFavList(username)
     }, []);
 
     return (
@@ -30,7 +31,7 @@ export default function FavScreen({ session, idsFavList }) {
                         }
                     </View> 
                 :
-                <Text style={styles.advice}>You must be logged</Text>
+                <Text style={styles.warning}>You must be logged</Text>
             }
         </>
     );
@@ -51,7 +52,7 @@ const styles = StyleSheet.create({
         width: 120,
         height: 200,
     },
-    advice: {
+    warning: {
         marginTop: 8, 
         marginLeft: 8
     }
