@@ -10,8 +10,8 @@ export default function FavScreen({ session, idsFavList }) {
     const height = 120;
 
     useEffect(() => {   
-        loadFavList(username)
-    }, []);
+        loadFavList(username);
+    }, [username]);
 
     return (
         <>
