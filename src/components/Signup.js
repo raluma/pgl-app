@@ -3,10 +3,9 @@ import { StyleSheet, View, Text, Alert } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { useSessionStore } from '../services/sessions';
 
-export default function Signup({ session }) {
+export default function Signup() {
     const signup = useSessionStore(state => state.signup);
     const setNameState = useSessionStore(state => state.setNameState);
-    const resetState = useSessionStore(state => state.resetState);
     
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -14,11 +13,6 @@ export default function Signup({ session }) {
     
     const [hidden, setHidden] = useState(true);
     const [hidden2, setHidden2] = useState(true);
-
-    if (session.state.name === "Signup" && session.state.value !== null) {
-        Alert.alert('', session.state.message);  
-        resetState();
-    }
 
     const onPressSignup = () => {
         if (username === '') {

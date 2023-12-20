@@ -3,24 +3,13 @@ import { StyleSheet, View, Text, Alert } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { useSessionStore } from '../services/sessions';
 
-export default function Login({ session }) {
+export default function Login() {
     const login = useSessionStore(state => state.login);
     const setNameState = useSessionStore(state => state.setNameState);
-    const resetState = useSessionStore(state => state.resetState);
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [hidden, setHidden] = useState(true);
-
-    if (session.state.name === "Login" && session.state.value === false) {
-        Alert.alert('', session.state.message);
-        resetState();
-    } else if (session.state.name === "Logout") {
-        setTimeout(() => {
-            Alert.alert('', session.state.message);
-        }, 1000);
-        resetState();
-    }
 
     const onPressLogin = () => {
         login(username, password);
