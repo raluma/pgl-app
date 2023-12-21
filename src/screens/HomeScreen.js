@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import FlipCard from 'react-native-flip-card'
 import { Card } from 'react-native-paper';
@@ -12,10 +13,15 @@ for (let i = 1; i <= 9; i++) {
 
 export default function HomeScreen({ session, idsFavList }) {
     const { username } = session;
+    const loadFavList = useFavListStore(state => state.loadFavList);
     const addFav = useFavListStore(state => state.addFav);
     const dropFav = useFavListStore(state => state.dropFav);
     const width = 120;
     const height = 120;
+
+    useEffect(() => {   
+        loadFavList(username);
+    }, [username]);
 
     const onToggle = (id) => {
         if (idsFavList.includes(id)) {
